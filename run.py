@@ -19,49 +19,66 @@ def create_folder():
 
 
 def compare_folders(old_path, new_path):
-    modifications = []
+    nouveaux = []
+    supprimes = []
+    modifies = []
 
-    # Vérification des fichiers dans old_path par rapport à new_path.
     for item in os.listdir(old_path):
         old_item_path = os.path.join(old_path, item)
         new_item_path = os.path.join(new_path, item)
 
         if os.path.isfile(old_item_path):
             if not os.path.exists(new_item_path):
-                modifications.append(f"Fichier supprimé: {old_item_path}")
+                supprimes.append(f"Fichier supprimé: {old_item_path}")
             elif os.path.getsize(old_item_path) != os.path.getsize(new_item_path):
-                modifications.append(
+                modifies.append(
                     f"Fichier modifié: {old_item_path} (dernière modification le {datetime.datetime.fromtimestamp(os.path.getmtime(old_item_path)).strftime('%Y-%m-%d %H:%M:%S')})"
                 )
         elif os.path.isdir(old_item_path) and not os.path.exists(new_item_path):
-            modifications.append(f"Dossier supprimé: {old_item_path}")
+            supprimes.append(f"Dossier supprimé: {old_item_path}")
         elif os.path.isdir(old_item_path):
-            modifications += compare_folders(old_item_path, new_item_path)
+            new_nouveaux, new_supprimes, new_modifies = compare_folders(
+                old_item_path, new_item_path
+            )
+            nouveaux.extend(new_nouveaux)
+            supprimes.extend(new_supprimes)
+            modifies.extend(new_modifies)
 
-    # Vérification des nouveaux fichiers ou dossiers dans new_path qui n'étaient pas dans old_path.
     for item in os.listdir(new_path):
         old_item_path = os.path.join(old_path, item)
         new_item_path = os.path.join(new_path, item)
 
         if not os.path.exists(old_item_path):
             if os.path.isfile(new_item_path):
-                modifications.append(f"Nouveau fichier: {new_item_path}")
+                nouveaux.append(f"Nouveau fichier: {new_item_path}")
             elif os.path.isdir(new_item_path):
-                modifications.append(f"Nouveau dossier: {new_item_path}")
+                nouveaux.append(f"Nouveau dossier: {new_item_path}")
 
-    return modifications
+    return nouveaux, supprimes, modifies
+
+
+def write_to_file(filename, content):
+    with open(filename, "w") as f:
+        for line in content:
+            f.write(line + "\n")
 
 
 def main():
-    # Création des dossiers si nécessaire.
     create_folder()
+    nouveaux, supprimes, modifies = compare_folders(old_path, new_path)
 
-    # Comparaison des dossiers.
-    modifications = compare_folders(old_path, new_path)
+    # Écrire les résultats dans les fichiers.
+    write_to_file("nouveaux.txt", nouveaux)
+    write_to_file("supprimes.txt", supprimes)
+    write_to_file("modifies.txt", modifies)
 
-    # Affichage des modifications.
-    for modification in modifications:
-        print(modification)
+    # Pour visualiser les résultats dans la console.
+    for item in nouveaux:
+        print(item)
+    for item in supprimes:
+        print(item)
+    for item in modifies:
+        print(item)
 
 
 if __name__ == "__main__":
