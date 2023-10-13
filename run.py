@@ -67,10 +67,13 @@ def main():
     create_folder()
     nouveaux, supprimes, modifies = compare_folders(old_path, new_path)
 
+    if not os.path.exists("logs"):
+        os.mkdir("logs")
+
     # Écrire les résultats dans les fichiers.
-    write_to_file("nouveaux.txt", nouveaux)
-    write_to_file("supprimes.txt", supprimes)
-    write_to_file("modifies.txt", modifies)
+    write_to_file("logs/nouveaux.txt", nouveaux)
+    write_to_file("logs/supprimes.txt", supprimes)
+    write_to_file("logs/modifies.txt", modifies)
 
     # Pour visualiser les résultats dans la console.
     for item in nouveaux:
