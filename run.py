@@ -58,7 +58,7 @@ def compare_folders(old_path, new_path):
 
 
 def write_to_file(filename, content):
-    with open(filename, "w") as f:
+    with open(filename, "w", encoding="utf-8") as f:
         for line in content:
             f.write(line + "\n")
 
