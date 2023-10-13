@@ -13,10 +13,12 @@ Cet outil Python est spécialement conçu pour accompagner les développeurs pen
 ## Comment utiliser
 
 1. Placez ce script Python dans un répertoire contenant les dossiers "ancienne_version" et "nouvelle_version" que vous souhaitez comparer.
-2. Exécutez le script.
+2. Exécutez le script. `py .\run.py`
 3. Consultez le dossier "logs" pour voir les fichiers qui contiennent les différences détectées.
 
 ## Fichiers de sortie
+
+Dans le dossier **log**, vous trouverez les fichiers suivants :
 
 - `nouveaux.txt` : liste des fichiers et dossiers ajoutés lors de la refactorisation.
 - `supprimes.txt` : liste des fichiers et dossiers supprimés lors de la refactorisation.
@@ -24,8 +26,4 @@ Cet outil Python est spécialement conçu pour accompagner les développeurs pen
 
 ## Licence
 
-Ce projet est sous licence selon les termes de la "GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007". Consultez le fichier `LICENSE` pour plus de détails.
-
-
-
-un outil Python pour détecter et documenter les modifications apportées lors de la refactorisation du code entre deux versions d'un projet.
+Ce projet est sous licence selon les termes de la "GNU GENERAL PUBLIC LICENSE, Version 3". Consultez le fichier `LICENSE` pour plus de détails.
