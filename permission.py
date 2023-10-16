@@ -29,9 +29,6 @@ permissions_list = [
 ]
 
 
-import os
-
-
 def change_permissions(directory_path, permission):
     for root, dirs, files in os.walk(directory_path):
         for file in files:
@@ -45,6 +42,6 @@ def change_permissions(directory_path, permission):
 
 
 # Exemple d'utilisation
-directory_path = "./"
+directory_path = "./refacto_version/"
 permission = 0o777  # Par exemple, autorisations rwxr-xr-x
 change_permissions(directory_path, permission)
