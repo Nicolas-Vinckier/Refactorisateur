@@ -9,6 +9,7 @@ Cet outil Python est spécialement conçu pour accompagner les développeurs pen
 - **Documentation Automatique** : exportation des résultats dans des fichiers log distincts pour les ajouts, suppressions et modifications.
 - **Compatibilité des Caractères** : prise en charge intégrale de l'UTF-8 pour assurer la lisibilité des caractères spéciaux.
 - **Refactorisation Assistée** : idéal pour documenter et suivre les changements lors de la refactorisation du code.
+- **Gestion des modifications utilisateur** : permet de conserver les modifications apportées par l'utilisateur dans un dossier distinct.
 
 ## Comment utiliser
 
@@ -23,6 +24,7 @@ Dans le dossier **log**, vous trouverez les fichiers suivants :
 - `nouveaux.txt` : liste des fichiers et dossiers ajoutés lors de la refactorisation.
 - `supprimes.txt` : liste des fichiers et dossiers supprimés lors de la refactorisation.
 - `modifies.txt` : liste des fichiers qui ont été modifiés avec leur date de dernière modification.
+- `modifications_utilisateur.txt` : liste des fichiers qui ont été modifiés par l'utilisateur avec leur date de dernière modification.
 
 ## Licence
 
