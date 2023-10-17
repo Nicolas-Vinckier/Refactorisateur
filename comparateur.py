@@ -65,8 +65,8 @@ def compare_folders(dir1, dir2):
 
 
 if __name__ == "__main__":
-    folder1 = input("Enter path to the first folder: ")
-    folder2 = input("Enter path to the second folder: ")
+    folder1 = input("Entrer le nom du premier dossier: ")
+    folder2 = input("Entrer le nom du second dossier: ")
 
     # Check if paths exist and are directories
     if not os.path.isdir(folder1) or not os.path.isdir(folder2):
