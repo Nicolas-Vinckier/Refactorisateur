@@ -1,25 +1,37 @@
+import filecmp
 import os
 
-def compare_files(file1_path, file2_path):
-    with open(file1_path, "r") as file1, open(file2_path, "r") as file2:
-        file1_lines = file1.read().splitlines()
-        file2_lines = file2.read().splitlines()
-        for i, (line1, line2) in enumerate(zip(file1_lines, file2_lines), start=1):
-            if line1 != line2:
-                print(f"Line {i}:")
-                print(f"{file1_path}: {line1}")
-                print(f"{file2_path}: {line2}")
-        print("Comparison complete.")
 
-# Ask user for file paths
-file1_path = input("Enter path for first file: ")
-file2_path = input("Enter path for second file: ")
+def compare_folders(dir1, dir2):
+    """
+    Compare the contents of two directories and report differences.
+    """
+    dcmp = filecmp.dircmp(dir1, dir2)
 
-# Check if files exist
-if not os.path.isfile(file1_path):
-    print(f"{file1_path} does not exist.")
-elif not os.path.isfile(file2_path):
-    print(f"{file2_path} does not exist.")
-else:
-    # Compare files
-    compare_files(file1_path, file2_path)
+    # Report files and subdirectories unique to dir1
+    for item in dcmp.left_only:
+        print(f"Only in {dir1}: {item}")
+
+    # Report files and subdirectories unique to dir2
+    for item in dcmp.right_only:
+        print(f"Only in {dir2}: {item}")
+
+    # Report files with differences
+    for name in dcmp.diff_files:
+        print(f"Different file: {name} in {dir1} and {dir2}")
+
+    # Recursively compare subdirectories
+    for sub_dcmp in dcmp.subdirs.values():
+        compare_folders(sub_dcmp.left, sub_dcmp.right)
+
+
+if __name__ == "__main__":
+    folder1 = input("Enter path to the first folder: ")
+    folder2 = input("Enter path to the second folder: ")
+
+    # Check if paths exist and are directories
+    if not os.path.isdir(folder1) or not os.path.isdir(folder2):
+        print("One or both paths are not valid directories.")
+        exit(1)
+
+    compare_folders(folder1, folder2)
