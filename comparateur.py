@@ -1,8 +1,18 @@
 import filecmp
 import os
 import difflib
+import datetime
 
 BLACKLISTED_EXTENSIONS = {".svg", ".png", ".jpg", ".jpeg", ".gif"}
+
+
+def log(message):
+    """
+    Custom logging function to print to console and write to the log file.
+    """
+    print(message)
+    with open(log_filename, "a") as log_file:
+        log_file.write(message + "\n")
 
 
 def compare_files(file1, file2):
@@ -22,9 +32,9 @@ def compare_files(file1, file2):
 
     for line in diff:
         if line.startswith("- "):
-            print(f"In {file1}, line removed: {line[2:].rstrip()}")
+            log(f"In {file1}, line removed: {line[2:].rstrip()}")
         elif line.startswith("+ "):
-            print(f"In {file2}, line added: {line[2:].rstrip()}")
+            log(f"In {file2}, line added: {line[2:].rstrip()}")
 
 
 def compare_folders(dir1, dir2):
@@ -36,17 +46,17 @@ def compare_folders(dir1, dir2):
     # Report files and subdirectories unique to dir1
     for item in dcmp.left_only:
         if not item.endswith(tuple(BLACKLISTED_EXTENSIONS)):
-            print(f"Only in {dir1}: {item}")
+            log(f"Only in {dir1}: {item}")
 
     # Report files and subdirectories unique to dir2
     for item in dcmp.right_only:
         if not item.endswith(tuple(BLACKLISTED_EXTENSIONS)):
-            print(f"Only in {dir2}: {item}")
+            log(f"Only in {dir2}: {item}")
 
     # Compare files with differences
     for name in dcmp.diff_files:
         if not name.endswith(tuple(BLACKLISTED_EXTENSIONS)):
-            print(f"Different file: {name}")
+            log(f"Different file: {name}")
             compare_files(os.path.join(dir1, name), os.path.join(dir2, name))
 
     # Recursively compare subdirectories
@@ -60,7 +70,12 @@ if __name__ == "__main__":
 
     # Check if paths exist and are directories
     if not os.path.isdir(folder1) or not os.path.isdir(folder2):
-        print("One or both paths are not valid directories.")
+        log("One or both paths are not valid directories.")
         exit(1)
 
+    # Generate a unique timestamped log filename
+    current_time = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+    log_filename = f"{current_time}-LOG.txt"
+
+    # Begin directory comparison
     compare_folders(folder1, folder2)
