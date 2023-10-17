@@ -28,12 +28,20 @@ def compare_files(file1, file2):
 
     # Get differences using difflib
     d = difflib.Differ()
-    diff = list(d.compare(lines1, lines2))
+    diff_iter = iter(list(d.compare(lines1, lines2)))
 
-    for line in diff:
+    for line in diff_iter:
         if line.startswith("- "):
-            log(f"In {file1}, line removed: {line[2:].rstrip()}")
-        elif line.startswith("+ "):
+            next_line = next(diff_iter, "")  # Get the next line from the iterator
+            # If the next line starts with '+ ' and is just a space-adjusted version of the current line, skip both
+            if (
+                next_line.startswith("+ ")
+                and next_line[2:].lstrip() == line[2:].lstrip()
+            ):
+                continue
+            else:
+                log(f"In {file1}, line removed: {line[2:].rstrip()}")
+        elif line.startswith("+ ") and line[2:].strip():  # Ensures non-empty difference
             log(f"In {file2}, line added: {line[2:].rstrip()}")
 
 
