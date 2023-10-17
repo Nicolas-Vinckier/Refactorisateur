@@ -9,20 +9,28 @@ os.makedirs("PasswordFolder", exist_ok=True)
 # === Chemin parent sur le serveur distant
 parent_folder = "/home/myvcarh/www/"
 
+
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
 
+
 def list_files_on_sftp_folder(sftp, path):
     """
-    Liste et affiche les dossiers et fichiers du serveur SFTP.
+    Liste les dossiers et fichiers du serveur SFTP et les renvoie sous forme de deux listes.
     """
+    files_list = []
+    folders_list = []
     try:
         items = sftp.listdir_attr(path)
         for item in items:
-            file_type = "Dossier" if item.st_mode & 0o40000 else "Fichier"  # vérifie si c'est un dossier
-            print(f"{file_type}: {item.filename}")
+            if item.st_mode & 0o40000:  # C'est un dossier
+                folders_list.append(f"{item.filename}")
+            else:
+                files_list.append(f"{item.filename}")
     except Exception as e:
         print(f"Erreur lors de la liste des fichiers SFTP : {e}")
+    return files_list, folders_list
+
 
 def connect_to_sftp(host, port, username, password):
     try:
@@ -33,6 +41,7 @@ def connect_to_sftp(host, port, username, password):
     except Exception as e:
         print(f"Erreur de connexion SFTP : {e}")
         return None
+
 
 def main():
     clear_screen()
@@ -52,13 +61,22 @@ def main():
     print(f"Connexion au serveur SFTP {host}:{port} avec l'utilisateur {username}.\n")
 
     if sftp:
-        print(f"---------------------------- Dossier distant: {parent_folder} ----------------------------")
-        list_files_on_sftp_folder(sftp, parent_folder)
-        
+        print(
+            f"---------------------------- Dossier distant: {parent_folder} ----------------------------"
+        )
+        files_list, folders_list = list_files_on_sftp_folder(sftp, parent_folder)
+
+        print("Fichiers:")
+        print(files_list)
+
+        print("Dossiers:")
+        print(folders_list)
+
         # Fermer la connexion SFTP
         sftp.close()
     else:
         print("La connexion SFTP a échoué.")
+
 
 if __name__ == "__main__":
     main()
