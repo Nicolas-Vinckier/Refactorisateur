@@ -40,14 +40,9 @@ def compare_files(file1, file2):
             ):
                 continue
             else:
-<<<<<<< Updated upstream
-                log(f"In {file1}, line removed: {line[2:].rstrip()}")
-        elif line.startswith("+ ") and line[2:].strip(): 
-=======
                 # log(f"In {file1}, line removed: {line[2:].rstrip()}")
                 continue
         elif line.startswith("+ ") and line[2:].strip():  # Ensures non-empty difference
->>>>>>> Stashed changes
             log(f"In {file2}, line added: {line[2:].rstrip()}")
 
 
