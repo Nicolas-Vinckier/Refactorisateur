@@ -102,8 +102,8 @@ def main():
         # Fermer la connexion SFTP
         sftp.close()
 
-        # Attendez 10 minutes avant de resynchroniser
-        time.sleep(600)
+        # Resynchroniser
+        time.sleep(30)
 
 
 if __name__ == "__main__":
