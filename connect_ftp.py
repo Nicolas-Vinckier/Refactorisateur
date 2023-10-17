@@ -26,7 +26,7 @@ def connect_to_sftp(host, port, username, password):
         return None
 
 
-# Fonction qui affiche les dossier et fichier dans le dossier_client EN LOCAL
+# Fonction qui affiche les dossiers et fichiers dans le dossier_client EN LOCAL
 def list_files_in_client_folder():
     folders = [
         item
@@ -34,6 +34,9 @@ def list_files_in_client_folder():
         if os.path.isdir(os.path.join(dossier_client, item))
     ]
     folders.sort()
+    print("Dossiers locaux dans le dossier client :")
+    for folder in folders:
+        print(folder)
 
 
 def main():
@@ -62,14 +65,7 @@ def main():
 
         # Ajout d'une fonction pour voir le temps d'exécution de la fonction list_files_in_folders_with_pattern
 
-        # ---------------------- Reche662it [00:38, 15.48it/s]rche des fichiers ----------------------
-        start_time = time.time()
-        print("Recherche des fichiers en cours...")
-        temps_execution = time.time() - start_time
-        temps_execution = round(temps_execution, 2)
-        print(f"Temps d'exécution : {temps_execution} secondes")
-
-        # ---------------------- Formatage du fichier texte ----------------------
+        # ---------------------- Afficher les dossiers ----------------------
         list_files_in_client_folder()
 
         # Fermer la connexion SFTP
