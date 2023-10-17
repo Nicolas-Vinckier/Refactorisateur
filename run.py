@@ -15,7 +15,6 @@ def create_folder():
 
 
 def sync_and_refactor(old_path, new_path, refacto_path):
-    # Suppression des fichiers/dossiers supprimés
     for item in os.listdir(refacto_path):
         if item not in os.listdir(new_path):
             item_path = os.path.join(refacto_path, item)
@@ -25,28 +24,28 @@ def sync_and_refactor(old_path, new_path, refacto_path):
                 shutil.rmtree(item_path)
             print(f"Suppression de {item_path}")
 
-    # Ajout/Mise à jour des fichiers/dossiers
     for item in os.listdir(new_path):
         old_item_path = os.path.join(old_path, item)
         new_item_path = os.path.join(new_path, item)
         refacto_item_path = os.path.join(refacto_path, item)
-        user_modified_path = os.path.join(user_modifications_folder, item)
+
+        # Modification pour gérer les sous-dossiers dans user_modifications_folder
+        relative_path = os.path.relpath(old_item_path, old_path)
+        user_modified_path = os.path.join(user_modifications_folder, relative_path)
 
         if os.path.isfile(new_item_path):
-            # Si le fichier a été modifié par l'utilisateur, utiliser cette version
             if os.path.exists(user_modified_path):
                 shutil.copy2(user_modified_path, refacto_item_path)
                 print(
                     f"Copie des modifications de l'utilisateur de {user_modified_path} vers {refacto_item_path}"
                 )
-            # Sinon, utiliser la version de nouvelle_version
+                # Pause pour informer l'utilisateur
+                input("Appuyez sur Entrée pour continuer...")
             elif not os.path.exists(old_item_path) or os.path.getmtime(
                 old_item_path
             ) != os.path.getmtime(new_item_path):
                 shutil.copy2(new_item_path, refacto_item_path)
                 print(f"Copie de {new_item_path} vers {refacto_item_path}")
-
-        # Si c'est un dossier, descendre récursivement
         elif os.path.isdir(new_item_path):
             if not os.path.exists(refacto_item_path):
                 os.mkdir(refacto_item_path)
