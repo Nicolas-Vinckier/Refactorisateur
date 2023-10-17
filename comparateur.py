@@ -1,5 +1,30 @@
 import filecmp
 import os
+import difflib
+
+BLACKLISTED_EXTENSIONS = {".svg", ".png", ".jpg", ".jpeg", ".gif"}
+
+
+def compare_files(file1, file2):
+    """
+    Compare two files and print line-by-line differences.
+    """
+    with open(file1, "r", encoding="utf-8", errors="ignore") as f1, open(
+        file2, "r", encoding="utf-8", errors="ignore"
+    ) as f2:
+        # Read lines
+        lines1 = f1.readlines()
+        lines2 = f2.readlines()
+
+    # Get differences using difflib
+    d = difflib.Differ()
+    diff = list(d.compare(lines1, lines2))
+
+    for line in diff:
+        if line.startswith("- "):
+            print(f"In {file1}, line removed: {line[2:].rstrip()}")
+        elif line.startswith("+ "):
+            print(f"In {file2}, line added: {line[2:].rstrip()}")
 
 
 def compare_folders(dir1, dir2):
@@ -10,15 +35,19 @@ def compare_folders(dir1, dir2):
 
     # Report files and subdirectories unique to dir1
     for item in dcmp.left_only:
-        print(f"Only in {dir1}: {item}")
+        if not item.endswith(tuple(BLACKLISTED_EXTENSIONS)):
+            print(f"Only in {dir1}: {item}")
 
     # Report files and subdirectories unique to dir2
     for item in dcmp.right_only:
-        print(f"Only in {dir2}: {item}")
+        if not item.endswith(tuple(BLACKLISTED_EXTENSIONS)):
+            print(f"Only in {dir2}: {item}")
 
-    # Report files with differences
+    # Compare files with differences
     for name in dcmp.diff_files:
-        print(f"Different file: {name} in {dir1} and {dir2}")
+        if not name.endswith(tuple(BLACKLISTED_EXTENSIONS)):
+            print(f"Different file: {name}")
+            compare_files(os.path.join(dir1, name), os.path.join(dir2, name))
 
     # Recursively compare subdirectories
     for sub_dcmp in dcmp.subdirs.values():
