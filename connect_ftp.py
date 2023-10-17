@@ -12,6 +12,7 @@ parent_folder = "/"
 
 # Créer le dossier client s'il n'existe pas
 os.makedirs(dossier_client, exist_ok=True)
+os.makedirs("PasswordFolder", exist_ok=True)
 
 
 def connect_to_sftp(host, port, username, password):
@@ -45,12 +46,12 @@ def list_files_in_client_folder():
 
 def main():
     # Informations de connexion SFTP
-    host = ""
+    host = "ftp.cluster028.hosting.ovh.net"
     port = 22
-    username = ""
+    username = "myvcarh"
 
     # Lire le mot de passe depuis le fichier 'pass_ohmarket.txt'
-    with open("PasswordFolder\pass_ohmarket.txt", "r") as f:
+    with open("PasswordFolder/myvcardpro.txt", "r") as f:
         password = f.read().strip()
 
     sftp = connect_to_sftp(host, port, username, password)
@@ -61,7 +62,6 @@ def main():
     if sftp:
         print("Connexion SFTP réussie.")
         # Chemin du dossier à vérifier sur le serveur SFTP
-        parent_folder = "/www.optimhome-market.com/wp-content/uploads/"
 
         print("-------------- Dossier distant --------------")
         print(f"Recherche dans le dossier distant suivant : {parent_folder}")
@@ -73,31 +73,17 @@ def main():
         # ---------------------- Reche662it [00:38, 15.48it/s]rche des fichiers ----------------------
         start_time = time.time()
         print("Recherche des fichiers en cours...")
-
-        # =================================== Décommenter pour rechercher les fichiers sur le serveur SFTP ===================================
-        list_files_in_folders_with_pattern(sftp, parent_folder, pattern, output_file)
-
         temps_execution = time.time() - start_time
         temps_execution = round(temps_execution, 2)
         print(f"Temps d'exécution : {temps_execution} secondes")
 
         # ---------------------- Formatage du fichier texte ----------------------
-        formatage_fichier_texte(output_file)
-
         list_files_in_client_folder()
-
-        formatage_fichier_texte_local(already_downloaded)
-
-        fichier_a_telecharger()
 
         # ---------------------- Téléchargement des fichiers ----------------------
         start_time = time.time()
-        with open(to_download, "r") as f:
-            file_list = f.readlines()
 
         # ====================== Téléchargement des fichiers sur le serveur SFTP ======================
-        download_files(sftp, to_download, local_path)
-
         temps_execution = time.time() - start_time
         temps_execution = round(temps_execution, 2)
         print(f"Temps d'exécution : {temps_execution} secondes")
