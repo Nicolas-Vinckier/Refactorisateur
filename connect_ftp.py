@@ -8,7 +8,7 @@ dossier_client = "serveur_sftp"
 local_path = os.path.join(os.getcwd(), dossier_client)
 
 # === Chemin parent
-parent_folder = "/"
+parent_folder = "/home/myvcarh/www/"
 
 # Créer le dossier client s'il n'existe pas
 os.makedirs(dossier_client, exist_ok=True)
@@ -17,6 +17,19 @@ os.makedirs("PasswordFolder", exist_ok=True)
 
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
+
+
+def list_files_on_sftp_folder(sftp, path):
+    """
+    Liste et affiche les dossiers du serveur SFTP.
+    """
+    try:
+        items = sftp.listdir_attr(path)
+        for item in items:
+            if item.st_mode & 0o40000:  # vérifie si c'est un dossier
+                print(item.filename)
+    except Exception as e:
+        print(f"Erreur lors de la liste des fichiers SFTP : {e}")
 
 
 def connect_to_sftp(host, port, username, password):
@@ -30,7 +43,6 @@ def connect_to_sftp(host, port, username, password):
         return None
 
 
-# Fonction qui affiche les dossiers et fichiers dans le dossier_client EN LOCAL
 def list_files_in_client_folder():
     folders = [
         item
@@ -43,6 +55,8 @@ def list_files_in_client_folder():
     for entry in os.scandir(dossier_client):
         if entry.is_dir():
             print(entry.name)
+    # Supprimez ou commentez la ligne ci-dessous :
+    # list_files_on_sftp_folder(sftp, parent_folder)
 
 
 def main():
@@ -66,10 +80,11 @@ def main():
         # print("Connexion SFTP réussie.")
         # Chemin du dossier à vérifier sur le serveur SFTP
 
-        print("---------------------------- Dossier distant ----------------------------")
+        print(
+            "---------------------------- Dossier distant ----------------------------"
+        )
         print(f"Recherche dans le dossier distant suivant : {parent_folder}")
-
-        pattern = re.compile(r"^\d{2}_\d{4}$")
+        list_files_on_sftp_folder(sftp, parent_folder)
 
         # Ajout d'une fonction pour voir le temps d'exécution de la fonction list_files_in_folders_with_pattern
 
