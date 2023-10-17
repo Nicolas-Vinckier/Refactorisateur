@@ -3,7 +3,7 @@ import os
 import difflib
 import datetime
 
-BLACKLISTED_EXTENSIONS = {".svg", ".png", ".jpg", ".jpeg", ".gif"}
+BLACKLISTED_EXTENSIONS = {".svg", ".png", ".jpg", ".jpeg", ".gif", ".ico", ".mp4"}
 
 
 def log(message):
