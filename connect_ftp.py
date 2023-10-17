@@ -35,14 +35,6 @@ def list_files_in_client_folder():
     ]
     folders.sort()
 
-    # Affiche les dossiers trouvés
-    if len(folders) > 0:
-        print("-------------- Dossier local --------------")
-        print(f"Dossiers trouvés : {folders}")
-    else:
-        print("-------------- Dossier local --------------")
-        print("Aucun dossier n'a été trouvé.")
-
 
 def main():
     # Informations de connexion SFTP
@@ -79,14 +71,6 @@ def main():
 
         # ---------------------- Formatage du fichier texte ----------------------
         list_files_in_client_folder()
-
-        # ---------------------- Téléchargement des fichiers ----------------------
-        start_time = time.time()
-
-        # ====================== Téléchargement des fichiers sur le serveur SFTP ======================
-        temps_execution = time.time() - start_time
-        temps_execution = round(temps_execution, 2)
-        print(f"Temps d'exécution : {temps_execution} secondes")
 
         # Fermer la connexion SFTP
         sftp.close()
