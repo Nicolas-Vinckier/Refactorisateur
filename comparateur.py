@@ -11,7 +11,7 @@ def log(message):
     Custom logging function to print to console and write to the log file.
     """
     print(message)
-    with open(log_filename, "a") as log_file:
+    with open(log_filename, "a", encoding="utf-8") as log_file:
         log_file.write(message + "\n")
 
 
