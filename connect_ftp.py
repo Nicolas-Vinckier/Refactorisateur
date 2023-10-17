@@ -15,6 +15,10 @@ os.makedirs(dossier_client, exist_ok=True)
 os.makedirs("PasswordFolder", exist_ok=True)
 
 
+def clear_screen():
+    os.system("cls" if os.name == "nt" else "clear")
+
+
 def connect_to_sftp(host, port, username, password):
     try:
         transport = paramiko.Transport((host, port))
@@ -34,12 +38,16 @@ def list_files_in_client_folder():
         if os.path.isdir(os.path.join(dossier_client, item))
     ]
     folders.sort()
+
     print("Dossiers locaux dans le dossier client :")
-    for folder in folders:
-        print(folder)
+    for entry in os.scandir(dossier_client):
+        if entry.is_dir():
+            print(entry.name)
 
 
 def main():
+    clear_screen()
+
     # Informations de connexion SFTP
     host = "ftp.cluster028.hosting.ovh.net"
     port = 22
@@ -51,14 +59,14 @@ def main():
 
     sftp = connect_to_sftp(host, port, username, password)
 
-    print("-------------- Connexion SFTP --------------")
+    print("---------------------------- Connexion SFTP ----------------------------")
     print(f"Connexion au serveur SFTP {host}:{port} avec l'utilisateur {username}.")
 
     if sftp:
-        print("Connexion SFTP réussie.")
+        # print("Connexion SFTP réussie.")
         # Chemin du dossier à vérifier sur le serveur SFTP
 
-        print("-------------- Dossier distant --------------")
+        print("---------------------------- Dossier distant ----------------------------")
         print(f"Recherche dans le dossier distant suivant : {parent_folder}")
 
         pattern = re.compile(r"^\d{2}_\d{4}$")
